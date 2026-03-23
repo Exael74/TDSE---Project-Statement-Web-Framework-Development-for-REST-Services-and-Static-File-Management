@@ -61,3 +61,14 @@ To execute tests, run:
 ```bash
 mvn test
 ```
+
+## AWS Deployment Screenshots
+
+### Screenshot 1 - EC2 instance running
+[Add screenshot here]
+
+### Screenshot 2 - REST endpoint response
+[Add screenshot here]
+
+### Screenshot 3 - Static file served
+[Add screenshot here]
