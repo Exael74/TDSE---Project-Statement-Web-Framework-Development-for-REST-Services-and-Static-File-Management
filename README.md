@@ -55,6 +55,31 @@ Once running, navigate to:
 - **Basic REST Service:** http://localhost:8080/App/pi
 - **Static File Resource:** http://localhost:8080/index.html
 
+## Project Structure
+
+```text
+TDSE---Project-Statement-Web-Framework-Development-for-REST-Services-and-Static-File-Management/
+├── pom.xml
+├── README.md
+├── src/
+│   ├── main/
+│   │   ├── java/edu/escuelaing/arep/webframework/
+│   │   │   ├── HTTPServer.java
+│   │   │   ├── Request.java
+│   │   │   ├── Response.java
+│   │   │   ├── Route.java
+│   │   │   ├── WebFramework.java
+│   │   │   └── example/App.java
+│   │   └── resources/webroot/
+│   │       └── index.html
+│   └── test/java/edu/escuelaing/arep/webframework/
+│       └── WebFrameworkTest.java
+└── target/
+    ├── classes/
+    ├── test-classes/
+    └── surefire-reports/
+```
+
 ## Tests Overview
 The framework is verified using automated unit tests written in JUnit. Tests prove the reliability of HTTP query parameter parsing and response defaults.
 To execute tests, run:
