@@ -141,18 +141,19 @@ mvn test
 ```
 
 ```
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
 
 Los tests cubren:
 - Parseo correcto de path y múltiples query parameters
-- Manejo de query string vacío (retorna `null`)
+- Manejo de query string vacío (retorna `null`) y keys sin valores
 - Propiedades por defecto y setters de `Response` (status code, content-type, body)
+- Integración end-to-end con Server Socket HTTP verificando códigos 200 y 404
 
 ---
 
-## Autor
+## Autor: Stiven Esneider Pardo Gutierrez
 
 - **Proyecto:** Transformación Digital y Servicios Empresariales (TDSE)
 - **Universidad:** Escuela Colombiana de Ingeniería Julio Garavito
