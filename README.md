@@ -121,15 +121,12 @@ public class App {
 ## Capturas de Pantalla
 
 ### Página estática — `index.html`
-<!-- Agregar captura: docs/images/index.png -->
 ![index.html corriendo localmente](docs/images/index.png)
 
 ### Endpoint REST — `/App/hello?name=Pedro`
-<!-- Agregar captura: docs/images/hello.png -->
 ![hello endpoint](docs/images/hello.png)
 
 ### Endpoint REST — `/App/pi`
-<!-- Agregar captura: docs/images/pi.png -->
 ![pi endpoint](docs/images/pi.png)
 
 ---
@@ -144,6 +141,8 @@ mvn test
 [INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
 ```
+
+![alt text](image-4.png)
 
 Los tests cubren:
 - Parseo correcto de path y múltiples query parameters
