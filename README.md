@@ -1,99 +1,158 @@
-## STIVEN ESNEIDER PARDO GUTIERREZ
-# Web FrameworK
-This project is a fully functional web framework for Java, designed to develop web applications with backend REST services. It supports HTML files, JavaScript, CSS, images, and REST services using lambda functions with query parameter extraction.
+# Web Framework — REST Services & Static File Management
 
-## Architecture
+## Descripción
 
-The framework is composed of the following core components:
-- **`WebFramework`**: The main facade of the library. It provides static methods (`get()`, `staticfiles()`) to map URL paths to lambda functions or static directories.
-- **`HTTPServer`**: A Java Socket-based basic HTTP server implementation. It listens on port 8080, reads the HTTP requests, delegates to matching REST routes or serves static files, and sends back the HTTP responses.
-- **`Request`**: Encapsulates the HTTP request details. It parses the request URI and query parameters, providing standard access via `req.getValues(key)`.
-- **`Response`**: Encapsulates the HTTP response details, allowing developers to set headers like Content-Type, or status codes, and the body payload.
-- **`Route`**: A functional interface that developers implement via lambda expressions to handle incoming requests and produce output.
+Este proyecto transforma un servidor web básico en Java en un **mini framework web** que permite a los desarrolladores construir aplicaciones con:
 
-## Getting Started
+- **Servicios REST** definidos mediante funciones lambda (`get()`)
+- **Extracción de parámetros de consulta** de las URLs (`req.getValues("key")`)
+- **Servicio de archivos estáticos** (HTML, CSS, JS, imágenes) desde un directorio configurable (`staticfiles()`)
 
-### Prerequisites
-- Java 11 or higher
-- Maven
-- Git
+El framework no requiere dependencias externas. Está implementado únicamente con las APIs estándar de Java y construido con **Maven**.
 
-### Installation & Execution
-1. Clone the repository: `git clone <repo-url>`
-2. Compile and package the project:
-   ```bash
-   mvn clean package
-   ```
-3. Run the example App:
-   ```bash
-   mvn exec:java -Dexec.mainClass="edu.escuelaing.arep.webframework.example.App"
-   ```
-   *Alternatively, run the `App` class from your IDE.*
+---
 
-### Example Usage
+## Arquitectura
+
+```
+Navegador
+  │  GET /App/hello?name=Pedro
+  ▼
+HTTPServer  ──► Request (parsea path y query params)
+  │
+  ├─ ¿Ruta registrada? ──► SÍ ──► ejecuta lambda ──► Response.send()
+  │
+  └─ NO ──► busca archivo estático en /webroot ──► Response.sendFile()
+                │
+                └─ No existe ──► 404
+```
+
+### Clases principales
+
+| Clase | Responsabilidad |
+|---|---|
+| `WebFramework` | Singleton central — expone `get()`, `staticfiles()`; auto-inicia el servidor en un hilo |
+| `HTTPServer` | Acepta conexiones TCP, parsea la petición y delega al framework |
+| `Request` | Encapsula path y query params; expone `getValues(key)` |
+| `Response` | Encapsula el código de estado, Content-Type y el cuerpo de la respuesta |
+| `Route` | Interfaz funcional `@FunctionalInterface` — implementada con lambdas por el desarrollador |
+| `App` | Ejemplo de aplicación que usa el framework |
+
+### Estructura del proyecto
+
+```
+webframework/
+├── src/
+│   ├── main/
+│   │   ├── java/edu/escuelaing/arep/webframework/
+│   │   │   ├── WebFramework.java       # Fachada principal del framework
+│   │   │   ├── HTTPServer.java         # Servidor TCP con parseo HTTP
+│   │   │   ├── Request.java            # Parseo del request y query params
+│   │   │   ├── Response.java           # Construcción de respuestas HTTP
+│   │   │   ├── Route.java              # Interfaz funcional para lambdas
+│   │   │   └── example/
+│   │   │       └── App.java            # Aplicación de ejemplo
+│   │   └── resources/
+│   │       └── webroot/
+│   │           └── index.html          # Archivo estático de demo
+│   └── test/
+│       └── java/edu/escuelaing/arep/webframework/
+│           └── WebFrameworkTest.java   # Tests unitarios (JUnit 4)
+├── .gitignore
+├── pom.xml
+└── README.md
+```
+
+---
+
+## Instalación y Ejecución
+
+**Requisitos:** Java 11+, Maven 3.6+, Git
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/Exael74/TDSE---Project-Statement-Web-Framework-Development-for-REST-Services-and-Static-File-Management.git
+cd TDSE---Project-Statement-Web-Framework-Development-for-REST-Services-and-Static-File-Management
+
+# 2. Compilar y empaquetar
+mvn clean package
+
+# 3. Ejecutar la app de ejemplo
+mvn exec:java -Dexec.mainClass="edu.escuelaing.arep.webframework.example.App"
+```
+
+El servidor queda escuchando en el puerto **8080**.
+
+---
+
+## Uso del Framework
+
 ```java
 import static edu.escuelaing.arep.webframework.WebFramework.*;
 
 public class App {
     public static void main(String[] args) {
-        // Define directory for static files (e.g. src/main/resources/webroot)
+        // Define el directorio de archivos estáticos
         staticfiles("/webroot");
-        
-        // Define REST endpoint with query parameters
+
+        // Endpoint con parámetro de consulta
         get("/App/hello", (req, resp) -> "Hello " + req.getValues("name"));
-        
-        // Define REST endpoint returning mathematical PI
+
+        // Endpoint que retorna PI
         get("/App/pi", (req, resp) -> {
-            return String.valueOf(Math.PI); 
+            return String.valueOf(Math.PI);
         });
     }
 }
 ```
 
-Once running, navigate to:
-- **REST Service with Query Param:** http://localhost:8080/App/hello?name=Pedro
-- **Basic REST Service:** http://localhost:8080/App/pi
-- **Static File Resource:** http://localhost:8080/index.html
+---
 
-## Project Structure
+## Endpoints disponibles
 
-```text
-TDSE---Project-Statement-Web-Framework-Development-for-REST-Services-and-Static-File-Management/
-├── pom.xml
-├── README.md
-├── src/
-│   ├── main/
-│   │   ├── java/edu/escuelaing/arep/webframework/
-│   │   │   ├── HTTPServer.java
-│   │   │   ├── Request.java
-│   │   │   ├── Response.java
-│   │   │   ├── Route.java
-│   │   │   ├── WebFramework.java
-│   │   │   └── example/App.java
-│   │   └── resources/webroot/
-│   │       └── index.html
-│   └── test/java/edu/escuelaing/arep/webframework/
-│       └── WebFrameworkTest.java
-└── target/
-    ├── classes/
-    ├── test-classes/
-    └── surefire-reports/
-```
+| URL | Tipo | Respuesta esperada |
+|---|---|---|
+| `http://localhost:8080/index.html` | Archivo estático | Página HTML de bienvenida |
+| `http://localhost:8080/App/hello?name=Pedro` | REST | `Hello Pedro` |
+| `http://localhost:8080/App/pi` | REST | `3.141592653589793` |
 
-## Tests Overview
-The framework is verified using automated unit tests written in JUnit. Tests prove the reliability of HTTP query parameter parsing and response defaults.
-To execute tests, run:
+---
+
+## Capturas de Pantalla
+
+### Página estática — `index.html`
+<!-- Agregar captura: docs/images/index.png -->
+![index.html corriendo localmente](docs/images/index.png)
+
+### Endpoint REST — `/App/hello?name=Pedro`
+<!-- Agregar captura: docs/images/hello.png -->
+![hello endpoint](docs/images/hello.png)
+
+### Endpoint REST — `/App/pi`
+<!-- Agregar captura: docs/images/pi.png -->
+![pi endpoint](docs/images/pi.png)
+
+---
+
+## Tests
+
 ```bash
 mvn test
 ```
 
-## AWS Deployment Screenshots
+```
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
 
-### Screenshot 1 - EC2 instance running
-[Add screenshot here]
+Los tests cubren:
+- Parseo correcto de path y múltiples query parameters
+- Manejo de query string vacío (retorna `null`)
+- Propiedades por defecto y setters de `Response` (status code, content-type, body)
 
-### Screenshot 2 - REST endpoint response
-[Add screenshot here]
+---
 
-### Screenshot 3 - Static file served
-[Add screenshot here]
+## Autor
+
+- **Proyecto:** Transformación Digital y Servicios Empresariales (TDSE)
+- **Universidad:** Escuela Colombiana de Ingeniería Julio Garavito
